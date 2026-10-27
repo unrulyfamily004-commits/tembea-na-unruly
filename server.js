@@ -77,7 +77,7 @@ if (process.env.NODE_ENV !== 'production') {
   app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
   app.use(express.static(path.join(__dirname, 'public')));
 }
-app.use('/api', asyncRoute(async (req, res, next) => { await dbReady; next(); }));
+app.use('/api', (req, res, next) => { dbReady.then(() => next()).catch(next); });
 const auth = (req, res, next) => {
   try {
     const token = req.cookies.admin_session;
